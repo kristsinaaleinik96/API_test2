@@ -1,8 +1,12 @@
+﻿using Newtonsoft.Json;
+using System.Text.Json.Nodes;
+
 namespace API_Test2
 {
     [TestFixture]
     public class Tests
     {
+        private readonly string url = "https://gorest.co.in/public-api/users";
 
         [Test]
         public void FindSubstring()
@@ -13,7 +17,7 @@ namespace API_Test2
         }
 
         [Test]
-        public void StrinsandRegularexpression()
+        public void StringandRegularexpression()
         {
             string email = "";
             string patternEmail = @"(^[a-zA-z0-9._-]*)[@]([a-zA-Z0-9.-]*)(a-zA-Z)";
@@ -35,11 +39,20 @@ namespace API_Test2
         }
 
         [Test]
-        public void CompareCollection()
+
+        public async Task CompareCollection()
         {
-            var collecton1 = new List<int> { 1, 2, 3 };
-            var collecton2 = new List<int> { 3, 4, 5 };
-            Assert.That(collecton1, Is.EqualTo(collecton2));
+            List<UserAtributes> expectedUsers = new List<UserAtributes>()
+            {
+                new UserAtributes { id = 7450529, name = "Bhagwanti Ahuja", email = "ahuja_bhagwanti@toy-grimes.test", gender ="male", status ="active"}
+               // new UserAtributes { id = 4, name = "Maria Ivanova", email = "maria_bhagwanti@toy-grimes.test", gender ="female", status ="active"}
+            };
+            HttpClient client = new HttpClient();
+            string response = await client.GetStringAsync(url);
+            APIResponse? apiResponse = JsonConvert.DeserializeObject<APIResponse>(response);
+
+            Assert.IsNotNull(apiResponse);
+            Assert.That(apiResponse.data, Is.EqualTo(expectedUsers));
         }
 
         [Test]
