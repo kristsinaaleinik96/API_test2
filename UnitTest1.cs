@@ -6,7 +6,7 @@ namespace API_Test2
     [TestFixture]
     public class Tests
     {
-        private readonly string url = "https://gorest.co.in/public-api/users";
+        private readonly string url = "https://gorest.co.in/public/v2/users/6941858";
 
         [Test]
         public void FindSubstring()
@@ -42,17 +42,15 @@ namespace API_Test2
 
         public async Task CompareCollection()
         {
-            List<UserAtributes> expectedUsers = new List<UserAtributes>()
-            {
-                new UserAtributes { id = 7450529, name = "Bhagwanti Ahuja", email = "ahuja_bhagwanti@toy-grimes.test", gender ="male", status ="active"}
-               // new UserAtributes { id = 4, name = "Maria Ivanova", email = "maria_bhagwanti@toy-grimes.test", gender ="female", status ="active"}
-            };
+            UserAtributes expectedUsers = new UserAtributes { Id = 6941858, Name = "Bhagwanti Ahuja", Email = "dsfsdfsdf", Gender = "male", Status = "active" };
             HttpClient client = new HttpClient();
             string response = await client.GetStringAsync(url);
-            APIResponse? apiResponse = JsonConvert.DeserializeObject<APIResponse>(response);
-
+            UserAtributes? apiResponse = JsonConvert.DeserializeObject<UserAtributes>(response);
             Assert.IsNotNull(apiResponse);
-            Assert.That(apiResponse.data, Is.EqualTo(expectedUsers));
+            Assert.That(apiResponse.Email, Is.EqualTo(expectedUsers.Email));
+            Assert.That(apiResponse.Name, Is.EqualTo(expectedUsers.Name));
+            Assert.That(apiResponse.Gender, Is.EqualTo(expectedUsers.Gender));
+            Assert.That(apiResponse.Id, Is.EqualTo(expectedUsers.Id));
         }
 
         [Test]
